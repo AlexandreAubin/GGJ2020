@@ -13,6 +13,7 @@
 #include "XRMotionControllerBase.h" // for FXRMotionControllerBase::RightHandSourceId
 #include "CharacterFlags.h"
 #include "MyNameIsGameInstance.h"
+#include "PickableObject.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogFPChar, Warning, All);
 
@@ -42,12 +43,70 @@ AGGJ2020Character::AGGJ2020Character()
 	Mesh1P->CastShadow = false;
 	Mesh1P->SetRelativeRotation(FRotator(1.9f, -19.19f, 5.2f));
 	Mesh1P->SetRelativeLocation(FVector(-0.5f, -4.4f, -155.7f));
+
+	HoldingComponent = CreateDefaultSubobject<USceneComponent>(TEXT("HoldingComponent"));
+	HoldingComponent->SetRelativeLocation(FVector(50.2f, 48.4f, -10.6f));
+	HoldingComponent->SetupAttachment(RootComponent);
+
+	CurrentItem = NULL;
+	bCanMove = true;
+	bInspecting = false;
 }
 
 void AGGJ2020Character::BeginPlay()
 {
 	// Call the base class  
 	Super::BeginPlay();
+}
+
+void AGGJ2020Character::Tick(float DeltaSeconds)
+{
+	Super::Tick(DeltaSeconds);
+
+	Start = FirstPersonCameraComponent->GetComponentLocation();
+	ForwardVector = FirstPersonCameraComponent->GetForwardVector();
+	End = ((ForwardVector * 200.f) + Start);
+
+
+	if (!bHoldingItem)
+	{
+		if (GetWorld()->LineTraceSingleByChannel(Hit, Start, End, ECC_Visibility, DefaultComponentQueryParams, DefaultResponseParam))
+		{
+			if (Hit.GetActor()->GetClass()->IsChildOf(APickableObject::StaticClass()))
+			{
+				CurrentItem = Cast<APickableObject>(Hit.GetActor());
+			}
+		}
+		else
+		{
+			CurrentItem = NULL;
+		}
+	}
+
+	if (bInspecting)
+	{
+		if (bHoldingItem)
+		{
+			FirstPersonCameraComponent->SetFieldOfView(FMath::Lerp(FirstPersonCameraComponent->FieldOfView, 90.0f, 0.1f));
+			HoldingComponent->SetRelativeLocation(FVector(0.0f, 50.0f, 50.0f));
+			GetWorld()->GetFirstPlayerController()->PlayerCameraManager->ViewPitchMax = 179.9000002f;
+			GetWorld()->GetFirstPlayerController()->PlayerCameraManager->ViewPitchMin = -179.9000002f;
+			CurrentItem->RotateActor();
+		}
+		else
+		{
+			FirstPersonCameraComponent->SetFieldOfView(FMath::Lerp(FirstPersonCameraComponent->FieldOfView, 45.0f, 0.1f));
+		}
+	}
+	else
+	{
+		FirstPersonCameraComponent->SetFieldOfView(FMath::Lerp(FirstPersonCameraComponent->FieldOfView, 90.0f, 0.1f));
+
+		if (bHoldingItem)
+		{
+			HoldingComponent->SetRelativeLocation(FVector(50.0f, 0.0f, 0.f));
+		}
+	}
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -64,6 +123,14 @@ void AGGJ2020Character::SetupPlayerInputComponent(class UInputComponent* PlayerI
 
 	// Bind fire event
 	PlayerInputComponent->BindAction("Fire", IE_Pressed, this, &AGGJ2020Character::OnFire);
+
+	// Bind action event
+	PlayerInputComponent->BindAction("Action", IE_Pressed, this, &AGGJ2020Character::OnAction);
+
+	// Bind Inspect event
+	//TODO FIX
+	//PlayerInputComponent->BindAction("Inspect", IE_Pressed, this, &AGGJ2020Character::OnInspect);
+	//PlayerInputComponent->BindAction("Inspect", IE_Released, this, &AGGJ2020Character::OnInspectReleased);
 
 	// Enable touchscreen input
 	EnableTouchscreenMovement(PlayerInputComponent);
@@ -163,6 +230,28 @@ void AGGJ2020Character::EndTouch(const ETouchIndex::Type FingerIndex, const FVec
 	TouchItem.bIsPressed = false;
 }
 
+void AGGJ2020Character::ToggleMovement()
+{
+	bCanMove = !bCanMove;
+	bInspecting = !bInspecting;
+	FirstPersonCameraComponent->bUsePawnControlRotation = !FirstPersonCameraComponent->bUsePawnControlRotation;
+	bUseControllerRotationYaw = !bUseControllerRotationYaw;
+}
+
+void AGGJ2020Character::ToggleItemPickup()
+{
+	if (CurrentItem)
+	{
+		bHoldingItem = !bHoldingItem;
+		CurrentItem->Pickup();
+
+		if (!bHoldingItem)
+		{
+			CurrentItem = NULL;
+		}
+	}
+}
+
 void AGGJ2020Character::MoveForward(float Value)
 {
 	UMyNameIsGameInstance* gameInstance = Cast<UMyNameIsGameInstance>(GetGameInstance());
@@ -203,6 +292,42 @@ void AGGJ2020Character::MoveRight(float Value)
 			// add movement in that direction
 			AddMovementInput(GetActorRightVector() * -1, Value);
 		}
+	}
+}
+
+void AGGJ2020Character::OnAction()
+{
+	if (CurrentItem && !bInspecting)
+	{
+		ToggleItemPickup();
+	}
+}
+
+void AGGJ2020Character::OnInspect()
+{
+	if (bHoldingItem)
+	{
+		LastRotation = GetControlRotation();
+		ToggleMovement();
+	}
+	else
+	{
+		bInspecting = true;
+	}
+}
+
+void AGGJ2020Character::OnInspectReleased()
+{
+	if (bInspecting && bHoldingItem) 
+	{
+		GetController()->SetControlRotation(LastRotation);
+		GetWorld()->GetFirstPlayerController()->PlayerCameraManager->ViewPitchMax = PitchMax;
+		GetWorld()->GetFirstPlayerController()->PlayerCameraManager->ViewPitchMin = PitchMin;
+		ToggleMovement();
+	}
+	else 
+	{
+		bInspecting = false;
 	}
 }
 

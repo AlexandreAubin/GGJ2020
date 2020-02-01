@@ -9,6 +9,7 @@
 #include "GGJ2020Character.generated.h"
 
 class UInputComponent;
+class APickableObject;
 
 UCLASS(config=Game)
 class GGJ2020_API AGGJ2020Character : public ACharacter
@@ -28,6 +29,8 @@ public:
 
 protected:
 	virtual void BeginPlay();
+
+	virtual void Tick(float DeltaSeconds) override;
 
 public:
 	/** Base turn rate, in deg/sec. Other scaling may affect final turn rate. */
@@ -49,10 +52,36 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category=Projectile)
 	TSubclassOf<class AGGJ2020Projectile> ProjectileClass;
 
+	/** Holding Component */
+	UPROPERTY(EditAnywhere)
+	class USceneComponent* HoldingComponent;
+
 	//UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	//UMainCharacterAssets* MainCharacterAssets;
 
 	virtual void Jump() override;
+
+	UPROPERTY(EditAnywhere)
+	class APickableObject* CurrentItem;
+
+	bool bCanMove;
+	bool bHoldingItem;
+	bool bInspecting;
+
+	float PitchMax;
+	float PitchMin;
+
+	FVector HoldingComp;
+	FRotator LastRotation;
+
+	FVector Start;
+	FVector ForwardVector;
+	FVector End;
+
+	FHitResult Hit;
+
+	FComponentQueryParams DefaultComponentQueryParams;
+	FCollisionResponseParams DefaultResponseParam;
 
 protected:
 	
@@ -65,6 +94,13 @@ protected:
 
 	/** Handles stafing movement, left and right */
 	void MoveRight(float Val);
+
+	/** Action Function */
+	void OnAction();
+
+	/** Inspect Function */
+	void OnInspect();
+	void OnInspectReleased();
 
 	/**
 	 * Called via input to turn at a given rate.
@@ -90,6 +126,12 @@ protected:
 	void EndTouch(const ETouchIndex::Type FingerIndex, const FVector Location);
 	void TouchUpdate(const ETouchIndex::Type FingerIndex, const FVector Location);
 	TouchData	TouchItem;
+
+	// toggle player movement
+	void ToggleMovement();
+
+	// toggle holding item pickup
+	void ToggleItemPickup();
 	
 protected:
 	// APawn interface
