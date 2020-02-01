@@ -14,6 +14,7 @@
 #include "CharacterFlags.h"
 #include "MyNameIsGameInstance.h"
 #include "PickableObject.h"
+#include "Door.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogFPChar, Warning, All);
 
@@ -76,10 +77,16 @@ void AGGJ2020Character::Tick(float DeltaSeconds)
 			{
 				CurrentItem = Cast<APickableObject>(Hit.GetActor());
 			}
+
+			if (Hit.GetActor()->GetClass()->IsChildOf(ADoor::StaticClass()))
+			{
+				CurrentDoor = Cast<ADoor>(Hit.GetActor());
+			}
 		}
 		else
 		{
 			CurrentItem = NULL;
+			CurrentDoor = NULL;
 		}
 	}
 
@@ -266,9 +273,6 @@ void AGGJ2020Character::MoveForward(float Value)
 		}
 		else
 		{
-			FVector test = GetActorForwardVector();
-			FString text = test.ToString();
-			
 			// add movement in that direction
 			AddMovementInput(GetActorForwardVector() * -1, Value);
 		}
@@ -300,6 +304,11 @@ void AGGJ2020Character::OnAction()
 	if (CurrentItem && !bInspecting)
 	{
 		ToggleItemPickup();
+	}
+
+	if (CurrentDoor)
+	{
+		CurrentDoor->ChangeLevel();
 	}
 }
 

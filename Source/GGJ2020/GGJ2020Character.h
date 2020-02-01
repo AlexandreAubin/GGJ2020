@@ -64,6 +64,8 @@ public:
 	UPROPERTY(EditAnywhere)
 	class APickableObject* CurrentItem;
 
+	class ADoor* CurrentDoor;
+
 	bool bCanMove;
 	bool bHoldingItem;
 	bool bInspecting;
