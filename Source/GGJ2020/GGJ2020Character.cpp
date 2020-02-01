@@ -12,6 +12,7 @@
 #include "MotionControllerComponent.h"
 #include "XRMotionControllerBase.h" // for FXRMotionControllerBase::RightHandSourceId
 #include "CharacterFlags.h"
+#include "MyNameIsGameInstance.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogFPChar, Warning, All);
 
@@ -47,10 +48,6 @@ void AGGJ2020Character::BeginPlay()
 {
 	// Call the base class  
 	Super::BeginPlay();
-	Flags = new CharacterFlags();
-	auto test = GetGameInstance();
-	float t = 2.f;
-	//MainCharacterAssets = CreateDefaultSubobject<UMainCharacterAssets>(TEXT("MainCharacterAssets"));
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -159,9 +156,10 @@ void AGGJ2020Character::EndTouch(const ETouchIndex::Type FingerIndex, const FVec
 
 void AGGJ2020Character::MoveForward(float Value)
 {
+	UMyNameIsGameInstance* gameInstance = Cast<UMyNameIsGameInstance>(GetGameInstance());
 	if (Value != 0.0f)
 	{
-		if (Flags->ControlNormal)
+		if (gameInstance->Flags->ControlNormal)
 		{
 			// add movement in that direction
 			AddMovementInput(GetActorForwardVector(), Value);
@@ -178,9 +176,10 @@ void AGGJ2020Character::MoveForward(float Value)
 
 void AGGJ2020Character::MoveRight(float Value)
 {
+	UMyNameIsGameInstance* gameInstance = Cast<UMyNameIsGameInstance>(GetGameInstance());
 	if (Value != 0.0f)
 	{
-		if (Flags->ControlNormal)
+		if (gameInstance->Flags->ControlNormal)
 		{
 			// add movement in that direction
 			AddMovementInput(GetActorRightVector(), Value);

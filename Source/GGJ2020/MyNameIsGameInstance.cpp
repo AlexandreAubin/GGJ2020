@@ -2,4 +2,10 @@
 
 
 #include "MyNameIsGameInstance.h"
+#include "CharacterFlags.h"
+
+void UMyNameIsGameInstance::Init()
+{
+	Flags = new CharacterFlags();
+}
 

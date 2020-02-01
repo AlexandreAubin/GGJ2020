@@ -23,8 +23,6 @@ class GGJ2020_API AGGJ2020Character : public ACharacter
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	class UCameraComponent* FirstPersonCameraComponent;
 
-	class CharacterFlags* Flags;
-
 public:
 	AGGJ2020Character();
 
