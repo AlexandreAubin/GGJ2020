@@ -21,6 +21,7 @@ public:
 
 	virtual void Init() override;
 	
-	CharacterFlags* Flags;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
+	UCharacterFlags* Flags;
 };
  

@@ -3,18 +3,26 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "CharacterFlags.generated.h"
 
 /**
  * 
  */
-class GGJ2020_API CharacterFlags
+UCLASS(Blueprintable)
+class GGJ2020_API UCharacterFlags : public UObject
 {
+	GENERATED_BODY()
 public:
-	CharacterFlags();
-	~CharacterFlags();
 
+	UCharacterFlags();
+	~UCharacterFlags();
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Flags)
 	bool CanRun = false;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Flags)
 	bool CanJump = false;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Flags)
 	bool CanInteract = false;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Flags)
 	bool ControlNormal = false;
 };

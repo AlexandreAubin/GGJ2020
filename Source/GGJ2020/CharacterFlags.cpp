@@ -3,10 +3,10 @@
 
 #include "CharacterFlags.h"
 
-CharacterFlags::CharacterFlags()
+UCharacterFlags::UCharacterFlags()
 {
 }
 
-CharacterFlags::~CharacterFlags()
+UCharacterFlags::~UCharacterFlags()
 {
 }

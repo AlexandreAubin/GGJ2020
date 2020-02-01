@@ -6,6 +6,6 @@
 
 void UMyNameIsGameInstance::Init()
 {
-	Flags = new CharacterFlags();
+	Flags = NewObject<UCharacterFlags>();
 }
 
