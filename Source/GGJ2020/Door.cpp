@@ -4,6 +4,7 @@
 #include "Door.h"
 #include "Components/StaticMeshComponent.h"
 #include "Kismet/GameplayStatics.h"
+#include "Materials/Material.h"
 
 // Sets default values
 ADoor::ADoor()
@@ -16,19 +17,9 @@ ADoor::ADoor()
 
 }
 
-// Called when the game starts or when spawned
-void ADoor::BeginPlay()
-{
-	Super::BeginPlay();
-	
-}
-
 void ADoor::ChangeLevel()
 {
-	if (LevelName != TEXT(""))
-	{
-		UGameplayStatics::OpenLevel(this, "Labyrinth", true);
-	}
+	Destroy();
 }
 
 
