@@ -59,7 +59,7 @@ void AGGJ2020Character::SetupPlayerInputComponent(class UInputComponent* PlayerI
 	check(PlayerInputComponent);
 
 	// Bind jump events
-	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
+	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &AGGJ2020Character::Jump);
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
 
 	// Bind fire event
@@ -79,6 +79,15 @@ void AGGJ2020Character::SetupPlayerInputComponent(class UInputComponent* PlayerI
 	PlayerInputComponent->BindAxis("TurnRate", this, &AGGJ2020Character::TurnAtRate);
 	PlayerInputComponent->BindAxis("LookUp", this, &APawn::AddControllerPitchInput);
 	PlayerInputComponent->BindAxis("LookUpRate", this, &AGGJ2020Character::LookUpAtRate);
+}
+
+void AGGJ2020Character::Jump()
+{
+	UMyNameIsGameInstance* gameInstance = Cast<UMyNameIsGameInstance>(GetGameInstance());
+	if (gameInstance->Flags->CanJump)
+	{
+		ACharacter::Jump();
+	}
 }
 
 void AGGJ2020Character::OnFire()
@@ -157,6 +166,7 @@ void AGGJ2020Character::EndTouch(const ETouchIndex::Type FingerIndex, const FVec
 void AGGJ2020Character::MoveForward(float Value)
 {
 	UMyNameIsGameInstance* gameInstance = Cast<UMyNameIsGameInstance>(GetGameInstance());
+
 	if (Value != 0.0f)
 	{
 		if (gameInstance->Flags->ControlNormal)
@@ -167,6 +177,9 @@ void AGGJ2020Character::MoveForward(float Value)
 		}
 		else
 		{
+			FVector test = GetActorForwardVector();
+			FString text = test.ToString();
+			
 			// add movement in that direction
 			AddMovementInput(GetActorForwardVector() * -1, Value);
 		}

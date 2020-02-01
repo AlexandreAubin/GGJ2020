@@ -42,12 +42,17 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Gameplay)
 	FVector GunOffset;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
+	float RunMultiplier = 1.5f;
+
 	/** Projectile class to spawn */
 	UPROPERTY(EditDefaultsOnly, Category=Projectile)
 	TSubclassOf<class AGGJ2020Projectile> ProjectileClass;
 
 	//UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	//UMainCharacterAssets* MainCharacterAssets;
+
+	virtual void Jump() override;
 
 protected:
 	
