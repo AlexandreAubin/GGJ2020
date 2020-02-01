@@ -1,0 +1,69 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <None Include="..\..\GGJ2020.uproject" />
+    <Filter Include="Source">
+      <UniqueIdentifier>{C3A1996B-31BE-4C06-96CD-131D4416AA4A}</UniqueIdentifier>
+    </Filter>
+    <None Include="..\..\Source\GGJ2020.Target.cs">
+      <Filter>Source</Filter>
+    </None>
+    <None Include="..\..\Source\GGJ2020Editor.Target.cs">
+      <Filter>Source</Filter>
+    </None>
+    <Filter Include="Config">
+      <UniqueIdentifier>{E24BEA36-4DCA-43D6-9973-2E3F3FC1E308}</UniqueIdentifier>
+    </Filter>
+    <None Include="..\..\Config\DefaultEditor.ini">
+      <Filter>Config</Filter>
+    </None>
+    <None Include="..\..\Config\DefaultEditorPerProjectUserSettings.ini">
+      <Filter>Config</Filter>
+    </None>
+    <None Include="..\..\Config\DefaultEngine.ini">
+      <Filter>Config</Filter>
+    </None>
+    <None Include="..\..\Config\DefaultGame.ini">
+      <Filter>Config</Filter>
+    </None>
+    <None Include="..\..\Config\DefaultInput.ini">
+      <Filter>Config</Filter>
+    </None>
+    <Filter Include="Source\GGJ2020">
+      <UniqueIdentifier>{E6C58E1D-C881-4714-ACF3-A89262086F80}</UniqueIdentifier>
+    </Filter>
+    <None Include="..\..\Source\GGJ2020\GGJ2020.Build.cs">
+      <Filter>Source\GGJ2020</Filter>
+    </None>
+    <ClCompile Include="..\..\Source\GGJ2020\GGJ2020.cpp">
+      <Filter>Source\GGJ2020</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\GGJ2020\GGJ2020.h">
+      <Filter>Source\GGJ2020</Filter>
+    </ClInclude>
+    <ClCompile Include="..\..\Source\GGJ2020\GGJ2020Character.cpp">
+      <Filter>Source\GGJ2020</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\GGJ2020\GGJ2020Character.h">
+      <Filter>Source\GGJ2020</Filter>
+    </ClInclude>
+    <ClCompile Include="..\..\Source\GGJ2020\GGJ2020GameMode.cpp">
+      <Filter>Source\GGJ2020</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\GGJ2020\GGJ2020GameMode.h">
+      <Filter>Source\GGJ2020</Filter>
+    </ClInclude>
+    <ClCompile Include="..\..\Source\GGJ2020\GGJ2020HUD.cpp">
+      <Filter>Source\GGJ2020</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\GGJ2020\GGJ2020HUD.h">
+      <Filter>Source\GGJ2020</Filter>
+    </ClInclude>
+    <ClCompile Include="..\..\Source\GGJ2020\GGJ2020Projectile.cpp">
+      <Filter>Source\GGJ2020</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\GGJ2020\GGJ2020Projectile.h">
+      <Filter>Source\GGJ2020</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

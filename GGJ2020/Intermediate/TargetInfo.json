@@ -1,0 +1,14 @@
+{
+	"Targets": [
+		{
+			"Name": "GGJ2020",
+			"Path": "C:\\Users\\Admin\\Desktop\\GGJ2020\\GGJ2020\\GGJ2020\\Source\\GGJ2020.Target.cs",
+			"Type": "Game"
+		},
+		{
+			"Name": "GGJ2020Editor",
+			"Path": "C:\\Users\\Admin\\Desktop\\GGJ2020\\GGJ2020\\GGJ2020\\Source\\GGJ2020Editor.Target.cs",
+			"Type": "Editor"
+		}
+	]
+}

@@ -1,0 +1,2 @@
+C:\Users\Admin\Desktop\GGJ2020\GGJ2020\GGJ2020\Intermediate\Build\Win64\UE4Editor\Development\GGJ2020\Definitions.GGJ2020.h
+c:\users\admin\desktop\ggj2020\ggj2020\ggj2020\source\ggj2020\GGJ2020.h
