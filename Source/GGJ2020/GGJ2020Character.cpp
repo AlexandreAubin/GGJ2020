@@ -62,11 +62,12 @@ void AGGJ2020Character::BeginPlay()
 
 void AGGJ2020Character::Tick(float DeltaSeconds)
 {
+
 	Super::Tick(DeltaSeconds);
 
 	Start = FirstPersonCameraComponent->GetComponentLocation();
 	ForwardVector = FirstPersonCameraComponent->GetForwardVector();
-	End = ((ForwardVector * 200.f) + Start);
+	End = ((ForwardVector * 400.f) + Start);
 
 
 	if (!bHoldingItem)
@@ -257,6 +258,11 @@ void AGGJ2020Character::ToggleItemPickup()
 			CurrentItem = NULL;
 		}
 	}
+}
+
+void AGGJ2020Character::BeginOverlap(UPrimitiveComponent * OverlappedComponent, AActor * OtherActor, UPrimitiveComponent * OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult)
+{
+	//bHolding = false;
 }
 
 void AGGJ2020Character::MoveForward(float Value)

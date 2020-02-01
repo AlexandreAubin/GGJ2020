@@ -6,19 +6,32 @@
 #include "Kismet/GameplayStatics.h"
 #include "GameFramework/Character.h"
 #include "Components/StaticMeshComponent.h"
+#include "SnapTriggerBox.h"
 
 // Sets default values
 APickableObject::APickableObject()
 {
 	MyMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
-	MyMesh->SetSimulatePhysics(true);
+	MyMesh->SetSimulatePhysics(false);
 	RootComponent = MyMesh;
 
 	bHolding = false;
 	bGravity = true;
 
+	MyMesh->OnComponentBeginOverlap.AddDynamic(this, &APickableObject::BeginOverlap);
+
 
 }
+
+void APickableObject::BeginOverlap(UPrimitiveComponent * OverlappedComponent, AActor * OtherActor, UPrimitiveComponent * OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult)
+{
+	ASnapTriggerBox* triggerbox = Cast<ASnapTriggerBox>(OtherActor);
+	if (triggerbox)
+	{
+		MyMesh->SetSimulatePhysics(false);
+	}
+}
+
 
 // Called when the game starts or when spawned
 void APickableObject::BeginPlay()
