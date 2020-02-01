@@ -12,7 +12,7 @@
 APickableObject::APickableObject()
 {
 	MyMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
-	MyMesh->SetSimulatePhysics(false);
+	MyMesh->SetSimulatePhysics(true);
 	RootComponent = MyMesh;
 
 	bHolding = false;

@@ -83,9 +83,15 @@ void AGGJ2020Character::Tick(float DeltaSeconds)
 			{
 				CurrentDoor = Cast<ADoor>(Hit.GetActor());
 			}
+
+			if (Hit.GetActor()->GetClass()->IsChildOf(APuzzleDoor::StaticClass()))
+			{
+				PuzzleDoor = Cast<APuzzleDoor>(Hit.GetActor());
+			}
 		}
 		else
 		{
+			PuzzleDoor = NULL;
 			CurrentItem = NULL;
 			CurrentDoor = NULL;
 		}
@@ -315,6 +321,11 @@ void AGGJ2020Character::OnAction()
 	if (CurrentDoor)
 	{
 		CurrentDoor->ChangeLevel();
+	}
+
+	if (PuzzleDoor)
+	{
+		PuzzleDoor->ChangeLevel();
 	}
 }
 

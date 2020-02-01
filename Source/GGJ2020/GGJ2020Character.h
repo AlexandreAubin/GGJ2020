@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "CharacterFlags.h"
+#include "PuzzleDoor.h"
 
 #include "GGJ2020Character.generated.h"
 
@@ -65,6 +66,7 @@ public:
 	class APickableObject* CurrentItem;
 
 	class ADoor* CurrentDoor;
+	class APuzzleDoor* PuzzleDoor;
 
 	bool bCanMove;
 	bool bHoldingItem;

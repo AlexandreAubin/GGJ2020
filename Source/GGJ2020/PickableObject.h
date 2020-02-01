@@ -51,6 +51,9 @@ public:
 	bool bHolding;
 	bool bGravity;
 
+	UPROPERTY(EditAnywhere)
+	FString TagName;
+
 	FRotator ControlRotation;
 	ACharacter* MyCharacter;
 	UCameraComponent* PlayerCamera;

@@ -22,6 +22,10 @@ public:
 	UPROPERTY(EditAnywhere)
 	class USceneComponent* HoldingComponent;
 
+	/** Holding Component */
+	UPROPERTY(EditAnywhere)
+	FString TagName;
+
 	void SetComponent(UStaticMeshComponent* mesh);
 
 protected:
