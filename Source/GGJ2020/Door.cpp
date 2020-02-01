@@ -5,6 +5,8 @@
 #include "Components/StaticMeshComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Materials/Material.h"
+#include "Components/AudioComponent.h"
+#include "Sound/SoundCue.h"
 
 // Sets default values
 ADoor::ADoor()
@@ -15,11 +17,48 @@ ADoor::ADoor()
 	MyMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
 	RootComponent = MyMesh;
 
+
+	SoundComponent = CreateDefaultSubobject<UAudioComponent>(TEXT("SoundComponent"));
+	SoundComponent->bAutoActivate = true;
+	SoundComponent->SetupAttachment(RootComponent);
+	SoundComponent->SetRelativeLocation(FVector(100.0f, 0.0f, 0.0f));
+
 }
 
 void ADoor::ChangeLevel()
 {
-	Destroy();
+	SetActorEnableCollision(false);
+	SetActorHiddenInGame(true);
+	SoundComponent->AdjustVolume(1.f, 100.f);
+	//Destroy();
 }
+void ADoor::BeginPlay()
+{
+	Super::BeginPlay();
+
+	// Note because the Cue Asset is set to loop the sound,
+	// once we start playing the sound, it will play 
+	// continiously...
+	SoundComponent->VolumeMultiplier = 0.01f;
+	SoundComponent->Play();
+}
+
+void ADoor::PostInitializeComponents()
+{
+	Super::PostInitializeComponents();
+
+	if (SoundToActivate->IsValidLowLevelFast()) {
+		SoundComponent->SetSound(SoundToActivate);
+	}
+}
+
+void ADoor::Tick(float DeltaSeconds)
+{
+	
+	//float propRpm = SoundToActivate->lastEngineRpm * SoundToActivate->reductionRatio;
+	SoundComponent->SetFloatParameter(FName("pitch"), 1);
+}
+
+
 
 

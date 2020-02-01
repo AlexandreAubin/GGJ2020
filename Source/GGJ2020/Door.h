@@ -4,6 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "Sound/SoundCue.h"
+#include "Components/AudioComponent.h"
+
 #include "Door.generated.h"
 
 UCLASS()
@@ -18,8 +21,18 @@ public:
 	UPROPERTY(EditAnywhere)
 	UStaticMeshComponent* MyMesh;
 
+	UPROPERTY(EditAnywhere)
+	UAudioComponent* SoundComponent;
+
+	UPROPERTY(EditAnywhere)
+	USoundCue* SoundToActivate;
+
+	virtual void PostInitializeComponents() override;
 
 protected:
+	virtual void BeginPlay() override;
+
+	virtual void Tick(float DeltaSeconds) override;
 
 public:	
 
