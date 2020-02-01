@@ -11,7 +11,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "MotionControllerComponent.h"
 #include "XRMotionControllerBase.h" // for FXRMotionControllerBase::RightHandSourceId
-#include "MainCharacterAssets.h"
+#include "CharacterFlags.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogFPChar, Warning, All);
 
@@ -47,8 +47,10 @@ void AGGJ2020Character::BeginPlay()
 {
 	// Call the base class  
 	Super::BeginPlay();
-
-	MainCharacterAssets = CreateDefaultSubobject<UMainCharacterAssets>(TEXT("MainCharacterAssets"));
+	Flags = new CharacterFlags();
+	auto test = GetGameInstance();
+	float t = 2.f;
+	//MainCharacterAssets = CreateDefaultSubobject<UMainCharacterAssets>(TEXT("MainCharacterAssets"));
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -155,59 +157,40 @@ void AGGJ2020Character::EndTouch(const ETouchIndex::Type FingerIndex, const FVec
 	TouchItem.bIsPressed = false;
 }
 
-//Commenting this section out to be consistent with FPS BP template.
-//This allows the user to turn without using the right virtual joystick
-
-//void AGGJ2020Character::TouchUpdate(const ETouchIndex::Type FingerIndex, const FVector Location)
-//{
-//	if ((TouchItem.bIsPressed == true) && (TouchItem.FingerIndex == FingerIndex))
-//	{
-//		if (TouchItem.bIsPressed)
-//		{
-//			if (GetWorld() != nullptr)
-//			{
-//				UGameViewportClient* ViewportClient = GetWorld()->GetGameViewport();
-//				if (ViewportClient != nullptr)
-//				{
-//					FVector MoveDelta = Location - TouchItem.Location;
-//					FVector2D ScreenSize;
-//					ViewportClient->GetViewportSize(ScreenSize);
-//					FVector2D ScaledDelta = FVector2D(MoveDelta.X, MoveDelta.Y) / ScreenSize;
-//					if (FMath::Abs(ScaledDelta.X) >= 4.0 / ScreenSize.X)
-//					{
-//						TouchItem.bMoved = true;
-//						float Value = ScaledDelta.X * BaseTurnRate;
-//						AddControllerYawInput(Value);
-//					}
-//					if (FMath::Abs(ScaledDelta.Y) >= 4.0 / ScreenSize.Y)
-//					{
-//						TouchItem.bMoved = true;
-//						float Value = ScaledDelta.Y * BaseTurnRate;
-//						AddControllerPitchInput(Value);
-//					}
-//					TouchItem.Location = Location;
-//				}
-//				TouchItem.Location = Location;
-//			}
-//		}
-//	}
-//}
-
 void AGGJ2020Character::MoveForward(float Value)
 {
 	if (Value != 0.0f)
 	{
-		// add movement in that direction
-		AddMovementInput(GetActorForwardVector(), Value);
+		if (Flags->ControlNormal)
+		{
+			// add movement in that direction
+			AddMovementInput(GetActorForwardVector(), Value);
+
+		}
+		else
+		{
+			// add movement in that direction
+			AddMovementInput(GetActorForwardVector() * -1, Value);
+		}
 	}
+
 }
 
 void AGGJ2020Character::MoveRight(float Value)
 {
 	if (Value != 0.0f)
 	{
-		// add movement in that direction
-		AddMovementInput(GetActorRightVector(), Value);
+		if (Flags->ControlNormal)
+		{
+			// add movement in that direction
+			AddMovementInput(GetActorRightVector(), Value);
+
+		}
+		else
+		{
+			// add movement in that direction
+			AddMovementInput(GetActorRightVector() * -1, Value);
+		}
 	}
 }
 

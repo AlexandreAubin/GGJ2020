@@ -4,8 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
-#include "MainCharacterAssets.h"
-
+#include "CharacterFlags.h"
 
 #include "GGJ2020Character.generated.h"
 
@@ -23,6 +22,8 @@ class GGJ2020_API AGGJ2020Character : public ACharacter
 	/** First person camera */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	class UCameraComponent* FirstPersonCameraComponent;
+
+	class CharacterFlags* Flags;
 
 public:
 	AGGJ2020Character();
@@ -47,8 +48,8 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category=Projectile)
 	TSubclassOf<class AGGJ2020Projectile> ProjectileClass;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	UMainCharacterAssets* MainCharacterAssets;
+	//UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	//UMainCharacterAssets* MainCharacterAssets;
 
 protected:
 	
