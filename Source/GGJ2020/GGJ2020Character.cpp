@@ -11,6 +11,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "MotionControllerComponent.h"
 #include "XRMotionControllerBase.h" // for FXRMotionControllerBase::RightHandSourceId
+#include "MainCharacterAssets.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogFPChar, Warning, All);
 
@@ -46,6 +47,8 @@ void AGGJ2020Character::BeginPlay()
 {
 	// Call the base class  
 	Super::BeginPlay();
+
+	MainCharacterAssets = CreateDefaultSubobject<UMainCharacterAssets>(TEXT("MainCharacterAssets"));
 }
 
 //////////////////////////////////////////////////////////////////////////

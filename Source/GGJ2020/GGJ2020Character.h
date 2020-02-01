@@ -4,12 +4,15 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "MainCharacterAssets.h"
+
+
 #include "GGJ2020Character.generated.h"
 
 class UInputComponent;
 
 UCLASS(config=Game)
-class AGGJ2020Character : public ACharacter
+class GGJ2020_API AGGJ2020Character : public ACharacter
 {
 	GENERATED_BODY()
 
@@ -43,6 +46,9 @@ public:
 	/** Projectile class to spawn */
 	UPROPERTY(EditDefaultsOnly, Category=Projectile)
 	TSubclassOf<class AGGJ2020Projectile> ProjectileClass;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UMainCharacterAssets* MainCharacterAssets;
 
 protected:
 	
