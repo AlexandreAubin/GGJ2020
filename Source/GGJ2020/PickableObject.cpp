@@ -45,7 +45,7 @@ void APickableObject::BeginPlay()
 
 	MyCharacter = UGameplayStatics::GetPlayerCharacter(this, 0);
 
-	//PlayerCamera = MyCharacter->FindComponentByClass<UCameraComponent>();
+	PlayerCamera = MyCharacter->FindComponentByClass<UCameraComponent>();
 
 	if (MyCharacter)
 	{
