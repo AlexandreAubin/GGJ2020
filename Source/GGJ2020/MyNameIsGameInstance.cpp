@@ -44,3 +44,20 @@ void UMyNameIsGameInstance::SetFlagToUnlock(EFlagsToUnlock flag)
 
 }
 
+void UMyNameIsGameInstance::SetFlagPuzzle(EFlagsForPuzzle flag)
+{
+	switch (flag)
+	{
+	case(EFlagsForPuzzle::PuzzleFlag1):
+		Flags->puzzleFlag1 = true;
+		break;
+	case(EFlagsForPuzzle::PuzzleFlag2):
+		Flags->puzzleFlag2 = true;
+		break;
+	case(EFlagsForPuzzle::PuzzleFlag3):
+		Flags->puzzleFlag3 = true;
+		break;
+
+	}
+}
+

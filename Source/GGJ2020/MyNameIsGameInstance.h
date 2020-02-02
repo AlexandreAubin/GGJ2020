@@ -35,6 +35,8 @@ public:
 	TArray<bool> FlagsLockedDoor;
 
 	void SetFlagToUnlock(EFlagsToUnlock flag);
+
+	void SetFlagPuzzle(EFlagsForPuzzle flag);
 };
  
 
@@ -46,4 +48,13 @@ enum class EFlagsToUnlock : uint8
 	UnlockJump,
 	UnlockNormalWalking,
 	UnlockColor,
+};
+
+UENUM(BlueprintType)
+enum class EFlagsForPuzzle : uint8
+{
+	None,
+	PuzzleFlag1,
+	PuzzleFlag2,
+	PuzzleFlag3,
 };

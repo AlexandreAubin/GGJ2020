@@ -4,7 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "Engine/TriggerBox.h"
+#include "MyNameIsGameInstance.h"
+
 #include "SnapTriggerBox.generated.h"
+
 
 class AActor;
 
@@ -27,6 +30,9 @@ public:
 	FString TagName;
 
 	void SetComponent(UStaticMeshComponent* mesh);
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
+	EFlagsForPuzzle triggerPuzzleFlag = EFlagsForPuzzle::None;
 
 protected:
 	virtual void BeginPlay();

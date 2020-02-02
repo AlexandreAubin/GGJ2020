@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "MyNameIsGameInstance.h"
 
 #include "PickableObject.generated.h"
 
@@ -58,4 +59,7 @@ public:
 	ACharacter* MyCharacter;
 	UCameraComponent* PlayerCamera;
 	FVector ForwardVector;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
+	EFlagsForPuzzle unlockPuzzleFlag = EFlagsForPuzzle::None;
 };

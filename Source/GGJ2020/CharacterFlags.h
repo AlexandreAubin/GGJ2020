@@ -27,4 +27,8 @@ public:
 	bool ControlNormal = false;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Flags)
 	bool CanSeeColor = false;
+
+	bool puzzleFlag1 = false;
+	bool puzzleFlag2 = false;
+	bool puzzleFlag3 = false;
 };

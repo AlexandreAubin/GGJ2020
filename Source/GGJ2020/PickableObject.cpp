@@ -28,6 +28,11 @@ void APickableObject::BeginOverlap(UPrimitiveComponent * OverlappedComponent, AA
 	ASnapTriggerBox* triggerbox = Cast<ASnapTriggerBox>(OtherActor);
 	if (triggerbox)
 	{
+		UMyNameIsGameInstance* gameInstance = Cast<UMyNameIsGameInstance>(GetGameInstance());
+		if (triggerbox->triggerPuzzleFlag == unlockPuzzleFlag)
+		{
+			gameInstance->SetFlagPuzzle(unlockPuzzleFlag);
+		}
 		MyMesh->SetSimulatePhysics(false);
 	}
 }
