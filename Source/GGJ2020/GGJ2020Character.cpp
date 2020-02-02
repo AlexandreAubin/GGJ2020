@@ -156,7 +156,7 @@ void AGGJ2020Character::SetupPlayerInputComponent(class UInputComponent* PlayerI
 	// We have 2 versions of the rotation bindings to handle different kinds of devices differently
 	// "turn" handles devices that provide an absolute delta, such as a mouse.
 	// "turnrate" is for devices that we choose to treat as a rate of change, such as an analog joystick
-	PlayerInputComponent->BindAxis("Turn", this, &APawn::AddControllerYawInput);
+	PlayerInputComponent->BindAxis("Turn", this, &AGGJ2020Character::AddControllerYawInput);
 	PlayerInputComponent->BindAxis("TurnRate", this, &AGGJ2020Character::TurnAtRate);
 	PlayerInputComponent->BindAxis("LookUp", this, &APawn::AddControllerPitchInput);
 	PlayerInputComponent->BindAxis("LookUpRate", this, &AGGJ2020Character::LookUpAtRate);
@@ -244,14 +244,6 @@ void AGGJ2020Character::EndTouch(const ETouchIndex::Type FingerIndex, const FVec
 	TouchItem.bIsPressed = false;
 }
 
-void AGGJ2020Character::ToggleMovement()
-{
-	bCanMove = !bCanMove;
-	bInspecting = !bInspecting;
-	FirstPersonCameraComponent->bUsePawnControlRotation = !FirstPersonCameraComponent->bUsePawnControlRotation;
-	bUseControllerRotationYaw = !bUseControllerRotationYaw;
-}
-
 void AGGJ2020Character::ToggleItemPickup()
 {
 	if (CurrentItem)
@@ -269,6 +261,42 @@ void AGGJ2020Character::ToggleItemPickup()
 void AGGJ2020Character::BeginOverlap(UPrimitiveComponent * OverlappedComponent, AActor * OtherActor, UPrimitiveComponent * OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult)
 {
 	//bHolding = false;
+}
+
+void AGGJ2020Character::AddControllerYawInput(float Val)
+{
+	UMyNameIsGameInstance* gameInstance = Cast<UMyNameIsGameInstance>(GetGameInstance());
+
+	//Super::AddControllerYawInput(Val);
+	if (Val != 0.f)
+	{
+		if (!gameInstance->Flags->ControlNormal)
+		{
+			Super::AddControllerYawInput(Val * -1);
+		}
+		else
+		{
+			Super::AddControllerYawInput(Val);
+		}
+	}
+}
+
+void AGGJ2020Character::AddControllerPitchInput(float Val)
+{
+	UMyNameIsGameInstance* gameInstance = Cast<UMyNameIsGameInstance>(GetGameInstance());
+
+	//Super::AddControllerPitchInput(Val);
+	if (Val != 0.f)
+	{
+		if (!gameInstance->Flags->ControlNormal)
+		{
+			Super::AddControllerPitchInput(Val * -1);
+		}
+		else
+		{
+			Super::AddControllerPitchInput(Val);
+		}
+	}
 }
 
 void AGGJ2020Character::MoveForward(float Value)
@@ -329,33 +357,6 @@ void AGGJ2020Character::OnAction()
 	}
 }
 
-void AGGJ2020Character::OnInspect()
-{
-	if (bHoldingItem)
-	{
-		LastRotation = GetControlRotation();
-		ToggleMovement();
-	}
-	else
-	{
-		bInspecting = true;
-	}
-}
-
-void AGGJ2020Character::OnInspectReleased()
-{
-	if (bInspecting && bHoldingItem) 
-	{
-		GetController()->SetControlRotation(LastRotation);
-		GetWorld()->GetFirstPlayerController()->PlayerCameraManager->ViewPitchMax = PitchMax;
-		GetWorld()->GetFirstPlayerController()->PlayerCameraManager->ViewPitchMin = PitchMin;
-		ToggleMovement();
-	}
-	else 
-	{
-		bInspecting = false;
-	}
-}
 
 void AGGJ2020Character::TurnAtRate(float Rate)
 {

@@ -95,6 +95,11 @@ public:
 			bool bFromSweep,
 			const FHitResult &SweepResult);
 
+
+	void AddControllerYawInput(float Val) override;
+	
+	void AddControllerPitchInput(float Val) override;
+
 protected:
 	
 	/** Fires a projectile. */
@@ -109,10 +114,6 @@ protected:
 
 	/** Action Function */
 	void OnAction();
-
-	/** Inspect Function */
-	void OnInspect();
-	void OnInspectReleased();
 
 	/**
 	 * Called via input to turn at a given rate.
@@ -139,8 +140,6 @@ protected:
 	void TouchUpdate(const ETouchIndex::Type FingerIndex, const FVector Location);
 	TouchData	TouchItem;
 
-	// toggle player movement
-	void ToggleMovement();
 
 	// toggle holding item pickup
 	void ToggleItemPickup();
