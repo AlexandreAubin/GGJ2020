@@ -1,31 +1,32 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "PickableObject.h"
+#include "Carnet.h"
 #include "Camera/CameraComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "GameFramework/Character.h"
 #include "Components/StaticMeshComponent.h"
 #include "SnapTriggerBox.h"
 
+
 // Sets default values
-APickableObject::APickableObject()
+ACarnet::ACarnet()
 {
+
 	MyMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
-	MyMesh->SetSimulatePhysics(true);
+	//MyMesh->SetSimulatePhysics(true);
 	RootComponent = MyMesh;
 
 	bHolding = false;
-	bGravity = true;
 
-	MyMesh->OnComponentBeginOverlap.AddDynamic(this, &APickableObject::BeginOverlap);
-
+ 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	PrimaryActorTick.bCanEverTick = true;
 
 }
 
-void APickableObject::BeginOverlap(UPrimitiveComponent * OverlappedComponent, AActor * OtherActor, UPrimitiveComponent * OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult)
+void ACarnet::BeginOverlap(UPrimitiveComponent * OverlappedComponent, AActor * OtherActor, UPrimitiveComponent * OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult)
 {
-	ASnapTriggerBox* triggerbox = Cast<ASnapTriggerBox>(OtherActor);
+	/*ASnapTriggerBox* triggerbox = Cast<ASnapTriggerBox>(OtherActor);
 	if (triggerbox)
 	{
 		UMyNameIsGameInstance* gameInstance = Cast<UMyNameIsGameInstance>(GetGameInstance());
@@ -34,12 +35,12 @@ void APickableObject::BeginOverlap(UPrimitiveComponent * OverlappedComponent, AA
 			gameInstance->SetFlagPuzzle(unlockPuzzleFlag);
 		}
 		MyMesh->SetSimulatePhysics(false);
-	}
+	}*/
 }
 
 
 // Called when the game starts or when spawned
-void APickableObject::BeginPlay()
+void ACarnet::BeginPlay()
 {
 	Super::BeginPlay();
 
@@ -57,7 +58,7 @@ void APickableObject::BeginPlay()
 		{
 			for (auto& Comp : Components)
 			{
-				if (Comp->GetName() == "HoldingComponent")
+				if (Comp->GetName() == "CarnetHoldingComponent")
 				{
 					HoldingComp = Cast<USceneComponent>(Comp);
 				}
@@ -66,23 +67,23 @@ void APickableObject::BeginPlay()
 	}
 
 
-	
+
 }
 
 // Called every frame
-void APickableObject::Tick(float DeltaTime)
+void ACarnet::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
 }
 
-void APickableObject::RotateActor()
+void ACarnet::RotateActor()
 {
 	ControlRotation = GetWorld()->GetFirstPlayerController()->GetControlRotation();
 	SetActorRotation(FQuat(ControlRotation));
 }
 
-void APickableObject::Pickup()
+void ACarnet::Pickup()
 {
 	bHolding = !bHolding;
 	bGravity = !bGravity;
@@ -102,4 +103,3 @@ void APickableObject::Pickup()
 		MyMesh->AddForce(ForwardVector * 100000 * MyMesh->GetMass());
 	}
 }
-

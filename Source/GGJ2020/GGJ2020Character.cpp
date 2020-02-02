@@ -15,6 +15,7 @@
 #include "MyNameIsGameInstance.h"
 #include "PickableObject.h"
 #include "Door.h"
+#include "Carnet.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogFPChar, Warning, All);
 
@@ -49,6 +50,11 @@ AGGJ2020Character::AGGJ2020Character()
 	HoldingComponent->SetRelativeLocation(FVector(50.2f, 48.4f, -10.6f));
 	HoldingComponent->SetupAttachment(RootComponent);
 
+	CarnetHoldingComponent = CreateDefaultSubobject<USceneComponent>(TEXT("CarnetHoldingComponent"));
+	CarnetHoldingComponent->SetRelativeLocation(FVector(10.f, 0.f, 0.f));
+	CarnetHoldingComponent->SetupAttachment(RootComponent);
+
+
 	CurrentItem = NULL;
 	bCanMove = true;
 	bInspecting = false;
@@ -58,6 +64,16 @@ void AGGJ2020Character::BeginPlay()
 {
 	// Call the base class  
 	Super::BeginPlay();
+	if (PauseCarnet)
+	{
+		PauseCarnet->MyMesh->AttachToComponent(CarnetHoldingComponent, FAttachmentTransformRules::KeepWorldTransform);
+		SetActorLocation(CarnetHoldingComponent->GetComponentLocation());
+
+		PauseCarnet->SetActorHiddenInGame(true);
+		PauseCarnet->SetActorEnableCollision(false);
+	}
+
+	
 }
 
 void AGGJ2020Character::Tick(float DeltaSeconds)
@@ -65,10 +81,18 @@ void AGGJ2020Character::Tick(float DeltaSeconds)
 
 	Super::Tick(DeltaSeconds);
 
+
 	Start = FirstPersonCameraComponent->GetComponentLocation();
 	ForwardVector = FirstPersonCameraComponent->GetForwardVector();
 	End = ((ForwardVector * 400.f) + Start);
 
+
+	if (PauseCarnet)
+	{
+		CarnetHoldingComponent->SetRelativeLocation(FVector(5.f, 0.0f, 0.f));
+	}
+
+	HoldingComponent->SetRelativeLocation(FVector(50.0f, 0.0f, 0.f));
 
 	if (!bHoldingItem)
 	{
@@ -141,6 +165,9 @@ void AGGJ2020Character::SetupPlayerInputComponent(class UInputComponent* PlayerI
 	// Bind action event
 	PlayerInputComponent->BindAction("Action", IE_Pressed, this, &AGGJ2020Character::OnAction);
 
+	// Bind Pause event
+	PlayerInputComponent->BindAction("Pause", IE_Pressed, this, &AGGJ2020Character::OnPause);
+
 	// Bind Inspect event
 	//TODO FIX
 	//PlayerInputComponent->BindAction("Inspect", IE_Pressed, this, &AGGJ2020Character::OnInspect);
@@ -164,10 +191,13 @@ void AGGJ2020Character::SetupPlayerInputComponent(class UInputComponent* PlayerI
 
 void AGGJ2020Character::Jump()
 {
-	UMyNameIsGameInstance* gameInstance = Cast<UMyNameIsGameInstance>(GetGameInstance());
-	if (gameInstance->Flags->CanJump)
+	if (!bPause)
 	{
-		ACharacter::Jump();
+		UMyNameIsGameInstance* gameInstance = Cast<UMyNameIsGameInstance>(GetGameInstance());
+		if (gameInstance->Flags->CanJump)
+		{
+			ACharacter::Jump();
+		}
 	}
 }
 
@@ -265,56 +295,66 @@ void AGGJ2020Character::BeginOverlap(UPrimitiveComponent * OverlappedComponent, 
 
 void AGGJ2020Character::AddControllerYawInput(float Val)
 {
-	UMyNameIsGameInstance* gameInstance = Cast<UMyNameIsGameInstance>(GetGameInstance());
-
-	//Super::AddControllerYawInput(Val);
-	if (Val != 0.f)
+	if (!bPause)
 	{
-		if (!gameInstance->Flags->ControlNormal)
+		UMyNameIsGameInstance* gameInstance = Cast<UMyNameIsGameInstance>(GetGameInstance());
+
+		//Super::AddControllerYawInput(Val);
+		if (Val != 0.f)
 		{
-			Super::AddControllerYawInput(Val * -1);
-		}
-		else
-		{
-			Super::AddControllerYawInput(Val);
+			if (!gameInstance->Flags->ControlNormal)
+			{
+				Super::AddControllerYawInput(Val * -1);
+			}
+			else
+			{
+				Super::AddControllerYawInput(Val);
+			}
 		}
 	}
 }
 
 void AGGJ2020Character::AddControllerPitchInput(float Val)
 {
-	UMyNameIsGameInstance* gameInstance = Cast<UMyNameIsGameInstance>(GetGameInstance());
-
-	//Super::AddControllerPitchInput(Val);
-	if (Val != 0.f)
+	if (!bPause)
 	{
-		if (!gameInstance->Flags->ControlNormal)
+		UMyNameIsGameInstance* gameInstance = Cast<UMyNameIsGameInstance>(GetGameInstance());
+
+		//Super::AddControllerPitchInput(Val);
+		if (Val != 0.f)
 		{
-			Super::AddControllerPitchInput(Val * -1);
-		}
-		else
-		{
-			Super::AddControllerPitchInput(Val);
+			if (!gameInstance->Flags->ControlNormal)
+			{
+				Super::AddControllerPitchInput(Val * -1);
+			}
+			else
+			{
+				Super::AddControllerPitchInput(Val);
+			}
 		}
 	}
+
 }
 
 void AGGJ2020Character::MoveForward(float Value)
 {
-	UMyNameIsGameInstance* gameInstance = Cast<UMyNameIsGameInstance>(GetGameInstance());
-
-	if (Value != 0.0f)
+	if (!bPause)
 	{
-		if (gameInstance->Flags->ControlNormal)
-		{
-			// add movement in that direction
-			AddMovementInput(GetActorForwardVector(), Value);
+		UMyNameIsGameInstance* gameInstance = Cast<UMyNameIsGameInstance>(GetGameInstance());
 
-		}
-		else
+		if (Value != 0.0f)
 		{
-			// add movement in that direction
-			AddMovementInput(GetActorForwardVector() * -1, Value);
+			if (gameInstance->Flags->ControlNormal)
+			{
+				// add movement in that direction
+				AddMovementInput(GetActorForwardVector(), Value);
+
+			}
+			else
+			{
+				// add movement in that direction
+				AddMovementInput(GetActorForwardVector() * -1, Value);
+			}
 		}
 	}
 
@@ -322,56 +362,84 @@ void AGGJ2020Character::MoveForward(float Value)
 
 void AGGJ2020Character::MoveRight(float Value)
 {
-	UMyNameIsGameInstance* gameInstance = Cast<UMyNameIsGameInstance>(GetGameInstance());
-	if (Value != 0.0f)
+	if (!bPause)
 	{
-		if (gameInstance->Flags->ControlNormal)
+		UMyNameIsGameInstance* gameInstance = Cast<UMyNameIsGameInstance>(GetGameInstance());
+		if (Value != 0.0f)
 		{
-			// add movement in that direction
-			AddMovementInput(GetActorRightVector(), Value);
+			if (gameInstance->Flags->ControlNormal)
+			{
+				// add movement in that direction
+				AddMovementInput(GetActorRightVector(), Value);
 
-		}
-		else
-		{
-			// add movement in that direction
-			AddMovementInput(GetActorRightVector() * -1, Value);
+			}
+			else
+			{
+				// add movement in that direction
+				AddMovementInput(GetActorRightVector() * -1, Value);
+			}
 		}
 	}
 }
 
 void AGGJ2020Character::OnAction()
 {
-	if (CurrentItem && !bInspecting)
+	if (!bPause)
 	{
-		ToggleItemPickup();
+		if (CurrentItem && !bInspecting)
+		{
+			ToggleItemPickup();
+		}
+
+		if (CurrentDoor)
+		{
+			CurrentDoor->ChangeLevel();
+		}
+
+		if (PuzzleDoor)
+		{
+			PuzzleDoor->ChangeLevel();
+		}
 	}
 
-	if (CurrentDoor)
-	{
-		CurrentDoor->ChangeLevel();
-	}
-
-	if (PuzzleDoor)
-	{
-		PuzzleDoor->ChangeLevel();
-	}
 }
 
 void AGGJ2020Character::OnPause()
 {
+	if (!bPause)
+	{
+		if (PauseCarnet)
+		{
+			PauseCarnet->SetActorHiddenInGame(false);
+		}
+	}
+	else
+	{
+		if (PauseCarnet)
+		{
+			PauseCarnet->SetActorHiddenInGame(true);
+		}
+	}
+	bPause = !bPause;
 }
 
 
 void AGGJ2020Character::TurnAtRate(float Rate)
 {
-	// calculate delta for this frame from the rate information
-	AddControllerYawInput(Rate * BaseTurnRate * GetWorld()->GetDeltaSeconds());
+	if (!bPause)
+	{
+		// calculate delta for this frame from the rate information
+		AddControllerYawInput(Rate * BaseTurnRate * GetWorld()->GetDeltaSeconds());
+	}
 }
 
 void AGGJ2020Character::LookUpAtRate(float Rate)
 {
-	// calculate delta for this frame from the rate information
-	AddControllerPitchInput(Rate * BaseLookUpRate * GetWorld()->GetDeltaSeconds());
+	if (!bPause)
+	{
+		// calculate delta for this frame from the rate information
+		AddControllerPitchInput(Rate * BaseLookUpRate * GetWorld()->GetDeltaSeconds());
+	}
 }
 
 bool AGGJ2020Character::EnableTouchscreenMovement(class UInputComponent* PlayerInputComponent)

@@ -57,6 +57,10 @@ public:
 	UPROPERTY(EditAnywhere)
 	class USceneComponent* HoldingComponent;
 
+	/** Holding Component */
+	UPROPERTY(EditAnywhere)
+	class USceneComponent* CarnetHoldingComponent;
+
 	//UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	//UMainCharacterAssets* MainCharacterAssets;
 
@@ -65,12 +69,17 @@ public:
 	UPROPERTY(EditAnywhere)
 	class APickableObject* CurrentItem;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	class ACarnet* PauseCarnet;
+
 	class ADoor* CurrentDoor;
 	class APuzzleDoor* PuzzleDoor;
 
 	bool bCanMove;
 	bool bHoldingItem;
 	bool bInspecting;
+	bool bPause;
+	bool firstTime = true;
 
 	float PitchMax;
 	float PitchMin;
