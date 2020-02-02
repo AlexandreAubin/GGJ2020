@@ -19,13 +19,13 @@ public:
 	APuzzleDoor();
 
 	UPROPERTY(EditAnywhere)
-		UStaticMeshComponent* MyMesh;
+	UStaticMeshComponent* MyMesh;
 
 	UPROPERTY(EditAnywhere)
-		UAudioComponent* SoundComponent;
+	UAudioComponent* SoundComponent;
 
 	UPROPERTY(EditAnywhere)
-		USoundCue* SoundToActivate;
+	USoundCue* SoundToActivate;
 
 	virtual void PostInitializeComponents() override;
 
@@ -37,7 +37,7 @@ protected:
 public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
-		FString LevelName = TEXT("");
+	FString LevelName = TEXT("");
 
 	void ChangeLevel();
 };

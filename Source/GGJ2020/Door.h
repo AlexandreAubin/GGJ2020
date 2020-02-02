@@ -6,6 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "Sound/SoundCue.h"
 #include "Components/AudioComponent.h"
+#include "MyNameIsGameInstance.h"
 
 #include "Door.generated.h"
 
@@ -38,6 +39,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
 	FString LevelName = TEXT("");
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
+	EFlagsToUnlock flag = EFlagsToUnlock::None;
 
 	void ChangeLevel();
 

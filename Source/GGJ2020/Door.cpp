@@ -7,6 +7,7 @@
 #include "Materials/Material.h"
 #include "Components/AudioComponent.h"
 #include "Sound/SoundCue.h"
+#include "MyNameIsGameInstance.h"
 
 // Sets default values
 ADoor::ADoor()
@@ -27,10 +28,15 @@ ADoor::ADoor()
 
 void ADoor::ChangeLevel()
 {
+	UMyNameIsGameInstance* gameInstance = Cast<UMyNameIsGameInstance>(GetGameInstance());
+	if (flag != EFlagsToUnlock::None)
+	{
+		gameInstance->SetFlagToUnlock(flag);
+	}
 	SetActorEnableCollision(false);
 	SetActorHiddenInGame(true);
 	SoundComponent->AdjustVolume(1.f, 100.f);
-	//Destroy();
+
 }
 void ADoor::BeginPlay()
 {
