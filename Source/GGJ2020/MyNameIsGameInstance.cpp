@@ -38,7 +38,7 @@ void UMyNameIsGameInstance::SetFlagToUnlock(EFlagsToUnlock flag)
 		break;
 	case(EFlagsToUnlock::UnlockColor):
 		Flags->CanRun = true;
-		GEngine->AddOnScreenDebugMessage(-1, 19.5f, FColor::Red, TEXT("THe world is prettier than you remember..."));
+		GEngine->AddOnScreenDebugMessage(-1, 19.5f, FColor::Red, TEXT("THe color are coming back..."));
 		break;
 	}
 

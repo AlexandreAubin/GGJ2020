@@ -28,11 +28,15 @@ void APuzzleDoor::ChangeLevel()
 	//TODO IF UNLOCK
 
 	UMyNameIsGameInstance* gameInstance = Cast<UMyNameIsGameInstance>(GetGameInstance());
-	gameInstance->SetFlagToUnlock(EFlagsToUnlock::UnlockColor);
-	PlaySoundDoor();
-	SetActorEnableCollision(false);
-	SetActorHiddenInGame(true);
-	SoundComponent->AdjustVolume(1.f, 100.f);
+	if (gameInstance->Flags->puzzleFlag1 && gameInstance->Flags->puzzleFlag2 && gameInstance->Flags->puzzleFlag3)
+	{
+		gameInstance->SetFlagToUnlock(EFlagsToUnlock::UnlockColor);
+		PlaySoundDoor();
+		SetActorEnableCollision(false);
+		SetActorHiddenInGame(true);
+		SoundComponent->AdjustVolume(1.f, 100.f);
+	}
+
 	//Destroy();
 }
 void APuzzleDoor::BeginPlay()
