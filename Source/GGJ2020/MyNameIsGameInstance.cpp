@@ -7,6 +7,8 @@
 
 void UMyNameIsGameInstance::Init()
 {
+	Super::Init();
+
 	Flags = NewObject<UCharacterFlags>();
 	// it, and its parameters from code.
 	//MainMusicAudioComponent = CreateDefaultSubobject<UAudioComponent>(TEXT("PropellerAudioComp"));
@@ -14,6 +16,6 @@ void UMyNameIsGameInstance::Init()
 
 void UMyNameIsGameInstance::StartGameInstance()
 {
-
+	Super::StartGameInstance();
 }
 
