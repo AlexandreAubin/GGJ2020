@@ -13,6 +13,7 @@
 /**
  * 
  */
+
 UCLASS()
 class GGJ2020_API UMyNameIsGameInstance : public UGameInstance
 {
@@ -30,5 +31,19 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Music)
 	USoundCue* MainMusic;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Music)
+	TArray<bool> FlagsLockedDoor;
+
+	void SetFlagToUnlock(EFlagsToUnlock flag);
 };
  
+
+UENUM(BlueprintType)
+enum class EFlagsToUnlock : uint8
+{
+	None,
+	UnlockRun,
+	UnlockJump,
+	UnlockNormalWalking,
+	UnlockColor,
+};

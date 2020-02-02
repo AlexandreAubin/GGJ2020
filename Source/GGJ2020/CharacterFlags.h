@@ -22,7 +22,9 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Flags)
 	bool CanJump = false;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Flags)
-	bool CanInteract = false;
+	bool CanInteract = true;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Flags)
 	bool ControlNormal = false;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Flags)
+	bool CanSeeColor = false;
 };

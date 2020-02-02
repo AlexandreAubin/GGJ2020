@@ -3,6 +3,8 @@
 
 #include "PuzzleDoor.h"
 
+#include "MyNameIsGameInstance.h"
+
 // Sets default values
 APuzzleDoor::APuzzleDoor()
 {
@@ -23,6 +25,11 @@ APuzzleDoor::APuzzleDoor()
 
 void APuzzleDoor::ChangeLevel()
 {
+	//TODO IF UNLOCK
+
+	UMyNameIsGameInstance* gameInstance = Cast<UMyNameIsGameInstance>(GetGameInstance());
+	gameInstance->SetFlagToUnlock(EFlagsToUnlock::UnlockColor);
+
 	SetActorEnableCollision(false);
 	SetActorHiddenInGame(true);
 	SoundComponent->AdjustVolume(1.f, 100.f);

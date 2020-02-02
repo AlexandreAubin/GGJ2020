@@ -4,6 +4,7 @@
 #include "MyNameIsGameInstance.h"
 #include "CharacterFlags.h"
 #include "Kismet/GameplayStatics.h"
+#include "Engine/Engine.h"
 
 void UMyNameIsGameInstance::Init()
 {
@@ -17,5 +18,29 @@ void UMyNameIsGameInstance::Init()
 void UMyNameIsGameInstance::StartGameInstance()
 {
 	Super::StartGameInstance();
+}
+
+void UMyNameIsGameInstance::SetFlagToUnlock(EFlagsToUnlock flag)
+{
+	switch (flag)
+	{
+	case(EFlagsToUnlock::UnlockJump):
+		Flags->CanJump = true;
+		GEngine->AddOnScreenDebugMessage(-1, 19.5f, FColor::Red, TEXT("You remember how to jump..."));
+		break;
+	case(EFlagsToUnlock::UnlockNormalWalking):
+		Flags->ControlNormal = true;
+		GEngine->AddOnScreenDebugMessage(-1, 19.5f, FColor::Red, TEXT("You remember how to walk properly..."));
+		break;
+	case(EFlagsToUnlock::UnlockRun):
+		Flags->CanRun = true;
+		GEngine->AddOnScreenDebugMessage(-1, 19.5f, FColor::Red, TEXT("You remember how to run..."));
+		break;
+	case(EFlagsToUnlock::UnlockColor):
+		Flags->CanRun = true;
+		GEngine->AddOnScreenDebugMessage(-1, 19.5f, FColor::Red, TEXT("THe world is prettier than you remember..."));
+		break;
+	}
+
 }
 
