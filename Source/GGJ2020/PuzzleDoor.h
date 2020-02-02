@@ -27,6 +27,10 @@ public:
 	UPROPERTY(EditAnywhere)
 	USoundCue* SoundToActivate;
 
+	UFUNCTION(Category = "Sound", BlueprintImplementableEvent, BlueprintCallable)
+	void PlaySoundDoor();
+
+
 	virtual void PostInitializeComponents() override;
 
 protected:

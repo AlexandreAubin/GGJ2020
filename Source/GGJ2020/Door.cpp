@@ -33,6 +33,7 @@ void ADoor::ChangeLevel()
 	{
 		gameInstance->SetFlagToUnlock(flag);
 	}
+	PlaySoundDoor();
 	SetActorEnableCollision(false);
 	SetActorHiddenInGame(true);
 	SoundComponent->AdjustVolume(1.f, 100.f);

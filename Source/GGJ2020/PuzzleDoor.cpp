@@ -29,7 +29,7 @@ void APuzzleDoor::ChangeLevel()
 
 	UMyNameIsGameInstance* gameInstance = Cast<UMyNameIsGameInstance>(GetGameInstance());
 	gameInstance->SetFlagToUnlock(EFlagsToUnlock::UnlockColor);
-
+	PlaySoundDoor();
 	SetActorEnableCollision(false);
 	SetActorHiddenInGame(true);
 	SoundComponent->AdjustVolume(1.f, 100.f);
