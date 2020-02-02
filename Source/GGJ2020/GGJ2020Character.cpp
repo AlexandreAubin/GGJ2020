@@ -357,6 +357,10 @@ void AGGJ2020Character::OnAction()
 	}
 }
 
+void AGGJ2020Character::OnPause()
+{
+}
+
 
 void AGGJ2020Character::TurnAtRate(float Rate)
 {
